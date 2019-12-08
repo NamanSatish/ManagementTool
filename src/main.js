@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
-import VueSignature from 'vue-signature-pad';
-Vue.use(VueSignature);
+import VueGoodTablePlugin from 'vue-good-table';
+import 'vue-good-table/dist/vue-good-table.css'
+
 import axios from 'axios';
 import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios)
-Vue.use(ClientTable, [options = {}], [useVuex = false], [theme = 'bootstrap3'], [template = 'default']);
+Vue.use(VueGoodTablePlugin);
 
 Vue.config.productionTip = false
 new Vue({

@@ -1,7 +1,8 @@
 module.exports = {
     // options...
     devServer: {
+        https:false,
         disableHostCheck: true,
-        port : 8080
+        port : 32561
     }
 }
