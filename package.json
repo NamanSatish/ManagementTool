@@ -19,7 +19,10 @@
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
     "vue-form-generator": "^2.3.4",
-    "vue-signature-pad": "^1.1.14"
+    "vue-gridmultiselect": "^1.1.0-beta-2",
+    "vue-signature-pad": "^1.1.14",
+    "vue-tables-2": "^1.6.15",
+    "vue-tables-3": "^2.0.1-beta05"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",

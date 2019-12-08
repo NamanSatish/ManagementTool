@@ -6,7 +6,8 @@ import axios from 'axios';
 import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios)
-   
+Vue.use(ClientTable, [options = {}], [useVuex = false], [theme = 'bootstrap3'], [template = 'default']);
+
 Vue.config.productionTip = false
 new Vue({
   render: h => h(App),
