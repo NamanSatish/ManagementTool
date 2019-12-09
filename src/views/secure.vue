@@ -65,8 +65,22 @@ updateParams(newProps) {
 
             ok: dialog => resetPassword(dialog, props.row),
             cancel: dialog => doNothing(),
-            message: 'User will have their password reset. Are you sure you want to change their password?'}"
+            message: 'User will have their password reset. Are you sure you want to change the password for'+ props.row.name +'?'}"
           >Reset Password</b-button>
+        </span>
+        <span v-else>{{props.formattedRow[props.column.field]}}</span>
+        <span v-if="props.column.field == 'terminate'">
+          <b-button
+            squared
+            variant="outline-danger"
+            class="myButton"
+            v-confirm="{
+            loader: true,
+
+            ok: dialog => terminate(dialog, props.row),
+            cancel: dialog => doNothing(),
+            message: 'User will be terminated. Are you sure you want to terminate ' + props.row.name +'?'}"
+          >Terminate</b-button>
         </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
       </template>
@@ -109,9 +123,8 @@ export default {
           dateOutputFormat: "MMM do Y"
         },
         {
-          label: "Percent",
-          field: "score",
-          type: "percentage"
+          label: "Terminate",
+          field: "terminate",
         },
         {
           label: "Reset Password",
@@ -209,7 +222,7 @@ export default {
     doNothing: function() {
       console.log("Did nothing");
     },
-    checkAgagin: function() {}
+    terminate: function() {}
   }
 };
 </script>
