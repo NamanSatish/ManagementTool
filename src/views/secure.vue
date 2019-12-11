@@ -46,7 +46,8 @@ updateParams(newProps) {
     }
 
     -->
-
+    <notifications group = "success" position="top left"/>
+    <notifications group = "canceled" position="center"/>
     <vue-good-table
       pagination-options="{
       enabled: true,
@@ -87,7 +88,6 @@ updateParams(newProps) {
 
 
 <script>
-import VuejsDialog from "vuejs-dialog";
 import { VueGoodTable } from "vue-good-table";
 
 export default {
@@ -170,52 +170,57 @@ export default {
     };
   },
   methods: {
+    /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
     resetPassword: function(user) {
-      console.log(user);
-      this.$dialog.prompt({title: "Reset Password", body: "What is the new Password for " + user.name, loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
+      this.$dialog.prompt({title: "Reset Password", html: true, body: "What is the new password for " + user.name, loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
           .then((dialog)=>{
-            console.log(user);
             this.newpassword = dialog.data;
-            console.log(this.newpassword)
-            console.log(dialog.data)
-            console.log("password set");
+            if( dialog.data.replace(/\s/g,'') == "" ){
+              this.$notify({type: 'warn', title: 'Password' , group: "canceled", duration : 3000,text: "Your password <b> cannot </b> be empty."})
+              throw new Error("Cannot have empty password");
+            }
             this.$dialog.prompt({       
               title: "Check Password",
               body: "Type the new password in again.",
               promptHelp: 'Type in the box below and click "[+:okText]"',
-              loader: true}).then((dialog) => {
-                console.log("sending password");
-                console.log(user);
-                this.sendPassword(user,this.newpassword);
-                
+              loader: true})
+              .then((dialog) => {
+                if(dialog.data != this.newpassword){
+                  this.$notify({type: 'warn', title: 'Password', group: "canceled", duration : 3000, text: "There was either an error or you have canceled this process. If this was an error, contact Relion."})
+                }else {
+                  this.sendPassword(user,this.newpassword);
+                  this.$notify({type: 'success', title: 'Password' , group: "success", duration : 2000,text: "A command is now being sent to <b>change the password</b> "})
+                }
               })
               .catch( e =>{
-              console.log(e);
-              console.log("Password Test Dissmissed");
+                this.$notify({type: 'warn', title: 'Password', group: "canceled", duration : 3000, text: "There was either an error or you have canceled this process. If this was an error, contact Relion."})
+              if(e){ console.error(e);}
               });
           })
-        .catch( e =>{
-              console.log(e);
-              console.log("New Password Dissmissed");
+        .catch( err =>{
+          this.$notify({type: 'warn', title: 'Password', group: "canceled", duration : 3000, text: "There was either an error or you have canceled this process. If this was an error, contact Relion."})
+              if(err){ console.error(err);}
         });
 
     },
     doNothing: function() {
-      console.log("Did nothing");
+      console.warn("Did nothing");
+      
     },
     terminate: function(user) {
         this.$dialog.confirm("You are about to <b>terminate " + user.name + "</b>. This is <b>irreversible</b>.", {type: 'hard', html: true, verification: 'Terminate'})
           .then(() => {
-            this.$notify({type: 'success', html:true ,text: "A command is now being sent to <b>terminate</b> "})
+            this.$notify({type: 'success', title: 'Terminate' , group: "success", duration : 2000,text: "A command is now being sent to <b>terminate</b> "})
           })
-          .catch(() => {
-            this.$notify({type: 'error', text: "An error has occured"})
+          .catch((e) => {
+            this.$notify({type: 'warn', title: 'Terminate', group: "canceled", duration : 3000, text: "There was either an error or you have canceled this process. If this was an error, contact Relion."})
+            if(e){ console.error(e);}
           })
       
     },
     sendPassword: function(user,newpassword){
       //someapi stuff
-      console.log("should have done some api stuff :)");
+     console.warn("should have done some api stuff :)" + user + newpassword);
     }
   }
 };
