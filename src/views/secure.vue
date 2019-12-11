@@ -60,12 +60,9 @@ updateParams(newProps) {
             squared
             variant="outline-danger"
             class="myButton"
-            v-confirm="{
-            loader: true,
 
-            ok: dialog => resetPassword(dialog, props.row),
-            cancel: dialog => doNothing(),
-            message: 'User will have their password reset. Are you sure you want to change the password for'+ props.row.name +'?'}"
+            @click = "resetPassword(props.row)"
+           
           >Reset Password</b-button>
         </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
@@ -74,15 +71,10 @@ updateParams(newProps) {
             squared
             variant="outline-danger"
             class="myButton"
-            v-confirm="{
-            loader: true,
-
-            ok: dialog => terminate(dialog, props.row),
-            cancel: dialog => doNothing(),
-            message: 'User will be terminated. Are you sure you want to terminate ' + props.row.name +'?'}"
+            @click = "terminate(props.row)"
           >Terminate</b-button>
         </span>
-        <span v-else>{{props.formattedRow[props.column.field]}}</span>
+        
       </template>
     </vue-good-table>
   </div>
@@ -123,13 +115,13 @@ export default {
           dateOutputFormat: "MMM do Y"
         },
         {
+          label: "Reset Password",
+          field: "action"
+        },
+        {
           label: "Terminate",
           field: "terminate",
         },
-        {
-          label: "Reset Password",
-          field: "action"
-        }
       ],
       rows: [
         {
@@ -178,51 +170,53 @@ export default {
     };
   },
   methods: {
-    resetPassword: function(dialog, user) {
+    resetPassword: function(user) {
       console.log(user);
-      console.log(dialog);
-      this.$dialog
-        .prompt({
-          title: "Reset Password",
-          body: "What is the new Password for " + user.name,
-          promptHelp: 'Type in the box below and click "[+:okText]"'
-        })
-        .then(dialog => {
-          this.newpassword = dialog.data;
-
-          this.$dialog2
-            .prompt({
-              title: "Reset Password",
-              body: "Type the password again",
-              promptHelp: 'Type in the box below and click "[+:okText]"'
-            })
-            .then(function() {
-              if ($dialog2.data == this.newpassword) {
-                this.$dialog2.alert(
-                  "The password is now being changed to:" + this.newpassword ||
-                    "The password can't be empty"
-                );
-              } else {
-                this.$dialog.alert(
-                  "The password didn't match each other");
-              }
-            })
-            .catch(e => function(e) {
+      this.$dialog.prompt({title: "Reset Password", body: "What is the new Password for " + user.name, loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
+          .then((dialog)=>{
+            console.log(user);
+            this.newpassword = dialog.data;
+            console.log(this.newpassword)
+            console.log(dialog.data)
+            console.log("password set");
+            this.$dialog.prompt({       
+              title: "Check Password",
+              body: "Type the new password in again.",
+              promptHelp: 'Type in the box below and click "[+:okText]"',
+              loader: true}).then((dialog) => {
+                console.log("sending password");
+                console.log(user);
+                this.sendPassword(user,this.newpassword);
+                
+              })
+              .catch( e =>{
               console.log(e);
-              console.log("Second Password Test dismissed");
-            });
-        })
-        .catch(e => {
-          // Triggered when dialog is dismissed by user
-          console.log(e);
-          console.log("First prompt dismissed");
+              console.log("Password Test Dissmissed");
+              });
+          })
+        .catch( e =>{
+              console.log(e);
+              console.log("New Password Dissmissed");
         });
-      dialog.close();
+
     },
     doNothing: function() {
       console.log("Did nothing");
     },
-    terminate: function() {}
+    terminate: function(user) {
+        this.$dialog.confirm("You are about to <b>terminate " + user.name + "</b>. This is <b>irreversible</b>.", {type: 'hard', html: true, verification: 'Terminate'})
+          .then(() => {
+            this.$notify({type: 'success', html:true ,text: "A command is now being sent to <b>terminate</b> "})
+          })
+          .catch(() => {
+            this.$notify({type: 'error', text: "An error has occured"})
+          })
+      
+    },
+    sendPassword: function(user,newpassword){
+      //someapi stuff
+      console.log("should have done some api stuff :)");
+    }
   }
 };
 </script>

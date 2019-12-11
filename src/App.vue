@@ -1,7 +1,7 @@
 <template>
-    <div id="app">
+    <!-- <div id="app"> -->
         <router-view @authenticated="setAuthenticated" />
-    </div>
+    <!-- </div> -->
 </template>
 
 <script>
