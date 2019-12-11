@@ -61,7 +61,7 @@ updateParams(newProps) {
             squared
             variant="outline-danger"
             class="myButton"
-
+            size="lg"
             @click = "resetPassword(props.row)"
            
           >Reset Password</b-button>
@@ -72,8 +72,9 @@ updateParams(newProps) {
             squared
             variant="outline-danger"
             class="myButton"
+            size="lg"
             @click = "terminate(props.row)"
-          >Terminate</b-button>
+          >Terminate Staff</b-button>
         </span>
         
       </template>
@@ -101,26 +102,31 @@ export default {
       columns: [
         {
           label: "Name",
-          field: "name"
+          field: "name",
+          width: "25%"
         },
         {
           label: "Computer Number",
-          field: "compnum"
+          field: "compnum",
+          width:"25%"
         },
         {
           label: "Last Recorded Login",
           field: "logintime",
           type: "date",
+          width:"25%",
           dateInputFormat: "yyyy-MM-dd",
           dateOutputFormat: "MMM do Y"
         },
         {
           label: "Reset Password",
-          field: "action"
+          field: "action",
+          width:"12%"
         },
         {
           label: "Terminate",
           field: "terminate",
+          width:"12%"
         },
       ],
       rows: [
@@ -235,4 +241,5 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 </style>
