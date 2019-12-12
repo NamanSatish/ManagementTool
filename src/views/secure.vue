@@ -178,11 +178,11 @@ export default {
   methods: {
     /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
     resetPassword: function(user) {
-      this.$dialog.prompt({title: "Reset Password", html: true, body: "What is the new password for " + user.name, loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
+      this.$dialog.prompt({title: "Reset Password", html: true, body: "What is the new password for " + user.name +". Suggestions : 7 characters, 1 capital letter, contain 1 number.", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
           .then((dialog)=>{
             this.newpassword = dialog.data;
-            if( dialog.data.replace(/\s/g,'') == "" ){
-              this.$notify({type: 'warn', title: 'Password' , group: "canceled", duration : 3000,text: "Your password <b> cannot </b> be empty."})
+            if( dialog.data.trim() == "" ){
+              this.notification('warn', 'Password' , "canceled", 3000,"Your password <b>cannot</b> be empty.")
               throw new Error("Cannot have empty password");
             }
             this.$dialog.prompt({       
@@ -192,19 +192,19 @@ export default {
               loader: true})
               .then((dialog) => {
                 if(dialog.data != this.newpassword){
-                  this.$notify({type: 'warn', title: 'Password', group: "canceled", duration : 3000, text: "There was either an error or you have canceled this process. If this was an error, contact Relion."})
+                  this.notification('warn', 'Password', "canceled", 3000,"The passwords did not match, ensure that it is correctly typed. If this was an error, contact Relion.")
                 }else {
                   this.sendPassword(user,this.newpassword);
-                  this.$notify({type: 'success', title: 'Password' , group: "success", duration : 2000,text: "A command is now being sent to <b>change the password</b> "})
+                  this.notification('success', 'Password' , "success", 2000,"A command is now being sent to <b>change the password</b> ")
                 }
               })
               .catch( e =>{
-                this.$notify({type: 'warn', title: 'Password', group: "canceled", duration : 3000, text: "There was either an error or you have canceled this process. If this was an error, contact Relion."})
+                this.notification('warn', 'Password', "canceled", 3000,"There was either an error or you have canceled this process. If this was an error, contact Relion.")
               if(e){ console.error(e);}
               });
           })
         .catch( err =>{
-          this.$notify({type: 'warn', title: 'Password', group: "canceled", duration : 3000, text: "There was either an error or you have canceled this process. If this was an error, contact Relion."})
+          this.notification('warn', 'Password', "canceled", 3000,"There was either an error or you have canceled this process. If this was an error, contact Relion.")
               if(err){ console.error(err);}
         });
 
@@ -216,10 +216,10 @@ export default {
     terminate: function(user) {
         this.$dialog.confirm("You are about to <b>terminate " + user.name + "</b>. This is <b>irreversible</b>.", {type: 'hard', html: true, verification: 'Terminate'})
           .then(() => {
-            this.$notify({type: 'success', title: 'Terminate' , group: "success", duration : 2000,text: "A command is now being sent to <b>terminate</b> "})
+            this.notification('success','Terminate' , "success", 2000,"A command is now being sent to <b>terminate</b> ")
           })
           .catch((e) => {
-            this.$notify({type: 'warn', title: 'Terminate', group: "canceled", duration : 3000, text: "There was either an error or you have canceled this process. If this was an error, contact Relion."})
+            this.notification('warn','Terminate',"canceled",3000,"There was either an error or you have canceled this process. If this was an error, contact Relion.")
             if(e){ console.error(e);}
           })
       
@@ -227,6 +227,17 @@ export default {
     sendPassword: function(user,newpassword){
       //someapi stuff
      console.warn("should have done some api stuff :)" + user + newpassword);
+    },
+    notification: function(type1,title1,group1,time,text1){
+      this.$notify({
+        type: type1,
+        title: title1,
+        group: group1,
+        duration : time,
+        text : text1
+      })
+
+
     }
   }
 };

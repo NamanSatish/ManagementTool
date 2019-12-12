@@ -1,7 +1,7 @@
 <template>
     <div id="login">
         <h1>DWC Management Tools Login</h1>
-        <p>You <b> must </b> be authorized to use this tool</p>
+        <p>You <b> must </b> be authorized to use this tool. The username &amp; password are <b> capital sensitive</b>. </p>
         <input type="text" name="username" v-model="input.username" placeholder="Username" />
         <input type="password" name="password" v-model="input.password" placeholder="Password" />
         <button type="button" v-on:click="login()">Login</button>
@@ -38,11 +38,13 @@
 
 <style scoped>
     #login {
-        width: 500px;
+        width: 600px;
         border: 1px solid #CCCCCC;
         background-color: #FFFFFF;
         margin: auto;
         margin-top: 200px;
         padding: 20px;
+        text-align: center;
+        vertical-align: middle;
     }
 </style>
