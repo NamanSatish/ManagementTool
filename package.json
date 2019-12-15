@@ -12,6 +12,7 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.1.0",
     "core-js": "^2.6.5",
+    "es6-promise": "^4.2.8",
     "eslint-loader": "^3.0.3",
     "loader-fs-cache": "^1.0.2",
     "loader-utils": "^1.2.3",
@@ -34,7 +35,8 @@
     "vue-signature-pad": "^1.1.14",
     "vue-tables-2": "^1.6.15",
     "vue-tables-3": "^2.0.1-beta05",
-    "vuejs-dialog": "^1.4.1"
+    "vuejs-dialog": "^1.4.1",
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",

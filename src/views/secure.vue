@@ -96,6 +96,9 @@ export default {
   components: {
     VueGoodTable
   },
+  created(){
+    console.log(this.$store.getters.confirmation)
+  },
   data() {
     return {
       newpassword: "",
@@ -176,7 +179,7 @@ export default {
     };
   },
   methods: {
-    /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
+    /*eslint no-console: ["error", { allow: ["warn", "error","log"] }] */
     resetPassword: function(user) {
       this.$dialog.prompt({title: "Reset Password", html: true, body: "What is the new password for " + user.name +". Suggestions : 7 characters, 1 capital letter, contain 1 number.", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
           .then((dialog)=>{
