@@ -7,7 +7,8 @@ export const store = new Vuex.Store({
     state:{
       confirmation:"",
       computers:"",
-      accounts:""
+      accounts:"",
+      accountcomp:"",
     },
     mutations:{
       change(state,payload){
@@ -22,11 +23,15 @@ export const store = new Vuex.Store({
       mutate_accounts(state,payload){
         state.accounts = payload;
       },
+      mutate_accountcomp(state,payload){
+        state.accountcomp = payload;
+      },
     },
     getters: {
       confirmation: state => state.confirmation,
       computers: state => state.computers,
-      accounts: state => state.accounts
+      accounts: state => state.accounts,
+      accountcomp: state => state.accountcomp
     }
 })
 export default store

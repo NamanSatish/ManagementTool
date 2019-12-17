@@ -116,14 +116,11 @@ export default {
         {
           label: "Last Recorded Login",
           field: "logintime",
-          type: "date",
           width:"25%",
-          dateInputFormat: "yyyy-MM-dd",
-          dateOutputFormat: "MMM do Y"
         },
         {
           label: "Reset Password",
-          field: "action",
+          field: "reset",
           width:"12%"
         },
         {

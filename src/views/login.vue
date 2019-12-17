@@ -12,6 +12,7 @@
       type="button"
       id="loginbutton"
       class="btn btn-outline-success"
+      v-bind:class="{'btn btn-outline-danger':nonet==true}"
       v-on:click="login()"
     >{{btnText}}</button>
   </div>
@@ -26,7 +27,8 @@ export default {
   data() {
     return {
       btnText: "Login",
-      address:"http://4cd00975.ngrok.io/api/v1/posts/",
+      nonet: false,
+      address: "http://69f20d61.ngrok.io/api/v1/posts/",
       input: {
         username: "",
         password: ""
@@ -35,42 +37,73 @@ export default {
   },
   methods: {
     login() {
+      if (this.input.username != "" && this.input.password != "") {
+        if (
+          this.input.username != this.$parent.mockAccount.username &&
+          this.input.password != this.$parent.mockAccount.password
+        ) {
+          alert("The username and / or password is incorrect");
+          return;
+        }
+      } else {
+        alert("A username and password must be present");
+        return;
+      }
       this.btnText = "Loading...";
-      axios.get(this.address+"reset")
-        .then(res =>{
+      axios.get(this.address + "reset")
+        .then(res => {
           this.$store.commit("mutate_confirmation", res);
           console.log(this.$store.getters.confirmation);
-          axios.get(this.address+"accounts")
-                .then(res=>{ 
-                this.$store.commit("mutate_accounts",res)
-                console.log(this.$store.getters.accounts);
-                        axios.get(this.address+"computers")
-                .then(res=>{ 
-                this.$store.commit("mutate_computers",res)
-                console.log(this.$store.getters.computers);
-                if (this.input.username != "" && this.input.password != "") {
-            if (
-              this.input.username == this.$parent.mockAccount.username &&
-              this.input.password == this.$parent.mockAccount.password
-            ) {
-              this.$emit("authenticated", true);
-              this.$router.replace({ name: "secure" });
-            } else {
-              alert("The username and / or password is incorrect");
-            }
-          } else {
-            alert("A username and password must be present");
-          }
+          axios.get(this.address + "accounts")
+            .then(res => {
+              this.$store.commit("mutate_accounts", res);
+              console.log(this.$store.getters.accounts);
+              axios.get(this.address + "computers")
+                .then(res => {
+                  this.$store.commit("mutate_computers", res);
+                  console.log(this.$store.getters.computers);
+                  axios.get(this.address + "ac")
+                    .then(res => {
+                      this.$store.commit("mutate_accountcomp", res);
+                      console.log(this.$store.getters.accountcomp);
+                  if (this.input.username != "" && this.input.password != "") {
+                    if (
+                      this.input.username ==
+                        this.$parent.mockAccount.username &&
+                      this.input.password == this.$parent.mockAccount.password
+                    ) {
+                      this.$emit("authenticated", true);
+                      this.$router.replace({ name: "secure" });
+                    } else {
+                      alert("The username and / or password is incorrect");
+                    }
+                  } else {
+                    alert("A username and password must be present");
+                  }
+
+                }).catch(err => {
+                  console.log(err);
+                  this.btnText = "Error";
+                  this.nonet = true;
+                });
                 })
-                .catch(err => {console.log(err)})     
-                })
-                .catch(err => {console.log(err)})
+                .catch(err => {
+                  console.log(err);
+                  this.btnText = "Error";
+                  this.nonet = true;
+                });
+            })
+            .catch(err => {
+              console.log(err);
+              this.btnText = "Error";
+              this.nonet = true;
+            });
         })
         .catch(err => {
           console.warn(err);
+          this.btnText = "Error";
+          this.nonet = true;
         });
-        
-   
     }
   }
 };
