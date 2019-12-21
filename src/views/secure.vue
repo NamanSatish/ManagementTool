@@ -56,27 +56,40 @@ updateParams(newProps) {
       :rows="rows"
     >
       <template slot="table-row" slot-scope="props">
-        <span v-if="props.column.field == 'action'">
+        <span v-if="props.column.field == 'reset'">
           <b-button
             squared
             variant="outline-danger"
             class="myButton"
             size="lg"
-            @click = "resetPassword(props.row)"
+            @click = "resetPassword(props.row.originalIndex)"
            
-          >Reset Password</b-button>
+          >Reset</b-button>
         </span>
+
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
+
         <span v-if="props.column.field == 'terminate'">
           <b-button
             squared
             variant="outline-danger"
             class="myButton"
             size="lg"
-            @click = "terminate(props.row)"
-          >Terminate Staff</b-button>
+            @click = "terminate(props.row.originalIndex)"
+          >Terminate</b-button>
         </span>
         
+        <span v-if="props.column.field == 'compchange'">
+          <b-button
+            squared
+            variant="outline-danger"
+            class="myButton"
+            size="lg"
+            @click = "changeComp(props.row.originalIndex)"
+          >Change</b-button>
+        </span>
+
+
       </template>
     </vue-good-table>
   </div>
@@ -96,40 +109,51 @@ export default {
   components: {
     VueGoodTable
   },
-  created(){
+  mounted(){
+    this.rows = this.$store.getters.accountcomp
     console.log(this.$store.getters.confirmation)
+  },
+  created(){
+    
+    
   },
   data() {
     return {
+      rows:[],
       newpassword: "",
       columns: [
         {
           label: "Name",
           field: "name",
-          width: "25%"
+          width: "30%"
         },
         {
           label: "Computer Number",
           field: "compnum",
-          width:"25%"
+          width:"20%"
         },
         {
           label: "Last Recorded Login",
           field: "logintime",
-          width:"25%",
+          width:"20%",
+        },
+        {
+          label: "Change Computer Number",
+          field: "compchange",
+          width:"9%"
         },
         {
           label: "Reset Password",
           field: "reset",
-          width:"12%"
+          width:"7%"
         },
         {
           label: "Terminate",
           field: "terminate",
-          width:"12%"
+          width:"10%"
         },
       ],
-      rows: [
+/*       rows: [
         {
           id: 1,
           name: "John",
@@ -172,7 +196,7 @@ export default {
           createdAt: "2019-10-31",
           score: 0.035343
         }
-      ]
+      ] */
     };
   },
   methods: {
@@ -236,7 +260,9 @@ export default {
         duration : time,
         text : text1
       })
-
+    },
+    changeComp: function(user){
+      console.warn("This should change the computer number for" + user );
 
     }
   }

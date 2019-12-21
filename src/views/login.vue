@@ -52,19 +52,19 @@ export default {
       this.btnText = "Loading...";
       axios.get(this.address + "reset")
         .then(res => {
-          this.$store.commit("mutate_confirmation", res);
+          this.$store.commit("mutate_confirmation", res.data);
           console.log(this.$store.getters.confirmation);
           axios.get(this.address + "accounts")
             .then(res => {
-              this.$store.commit("mutate_accounts", res);
+              this.$store.commit("mutate_accounts", res.data);
               console.log(this.$store.getters.accounts);
               axios.get(this.address + "computers")
                 .then(res => {
-                  this.$store.commit("mutate_computers", res);
+                  this.$store.commit("mutate_computers", res.data);
                   console.log(this.$store.getters.computers);
                   axios.get(this.address + "ac")
                     .then(res => {
-                      this.$store.commit("mutate_accountcomp", res);
+                      this.$store.commit("mutate_accountcomp", res.data);
                       console.log(this.$store.getters.accountcomp);
                   if (this.input.username != "" && this.input.password != "") {
                     if (
