@@ -62,12 +62,23 @@ updateParams(newProps) {
             variant="outline-danger"
             class="myButton"
             size="lg"
-            @click = "resetPassword(props.row.originalIndex)"
+            @click = "resetPassword(props.row)"
            
           >Reset</b-button>
         </span>
-
+        
+        
+        <span v-if="props.column.field == 'logintime'">
+          <span v-if="props.row.logintime == 'Sunday, December 31, 1600 4:00:00 PM'">
+             <span style="font-weight: bold; color: red;">Not in Use</span> 
+          </span>
+          <span v-if="Number(props.row.timecompare) <= (ts)">
+             <span style="font-weight: bold; color: red;">Not in Use</span> 
+          </span>
+          <span v-else>{{props.formattedRow[props.column.field]}}</span>
+       </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
+
 
         <span v-if="props.column.field == 'terminate'">
           <b-button
@@ -75,7 +86,7 @@ updateParams(newProps) {
             variant="outline-danger"
             class="myButton"
             size="lg"
-            @click = "terminate(props.row.originalIndex)"
+            @click = "terminate(props.row)"
           >Terminate</b-button>
         </span>
         
@@ -85,11 +96,11 @@ updateParams(newProps) {
             variant="outline-danger"
             class="myButton"
             size="lg"
-            @click = "changeComp(props.row.originalIndex)"
+            @click = "changeComp(props.row)"
           >Change</b-button>
         </span>
 
-
+        
       </template>
     </vue-good-table>
   </div>
@@ -110,8 +121,11 @@ export default {
     VueGoodTable
   },
   mounted(){
-    this.rows = this.$store.getters.accountcomp
+    this.rows = this.$store.getters.display
     console.log(this.$store.getters.confirmation)
+    this.ts = Math.round((new Date()).getTime() / 1000) - - 15552000;
+    console.log(this.ts)
+    console.log(1497628682361<this.ts)
   },
   created(){
     
@@ -119,6 +133,7 @@ export default {
   },
   data() {
     return {
+      ts:"",
       rows:[],
       newpassword: "",
       columns: [
@@ -136,6 +151,11 @@ export default {
           label: "Last Recorded Login",
           field: "logintime",
           width:"20%",
+        },
+        {
+          label: "Activity",
+          field: "timecompare",
+          width:"10%"
         },
         {
           label: "Change Computer Number",
@@ -202,6 +222,7 @@ export default {
   methods: {
     /*eslint no-console: ["error", { allow: ["warn", "error","log"] }] */
     resetPassword: function(user) {
+      console.log(user);
       this.$dialog.prompt({title: "Reset Password", html: true, body: "What is the new password for " + user.name +". Suggestions : 7 characters, 1 capital letter, contain 1 number.", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
           .then((dialog)=>{
             this.newpassword = dialog.data;
@@ -262,7 +283,21 @@ export default {
       })
     },
     changeComp: function(user){
-      console.warn("This should change the computer number for" + user );
+      console.log(user);
+      this.$dialog.prompt({title: "New Computer Number", html: true, body: "What is the computer number of " + user.name +"", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
+          .then((dialog)=>{
+            this.newpassword = dialog.data;
+            if( dialog.data.trim() == "" ){
+              this.notification('warn', 'Computer Number' , "canceled", 3000,"Your computer number <b>cannot</b> be empty.")
+              throw new Error("Cannot have empty password");
+            }else{
+              this.notification('success','Computer Number' , "success", 2000,"A command is now being sent to <b>change the computer number</b> ")
+            }
+          })
+        .catch( err =>{
+          this.notification('warn', 'Computer Number', "canceled", 3000,"There was either an error or you have canceled this process. If this was an error, contact Relion.")
+              if(err){ console.error(err);}
+        });
 
     }
   }

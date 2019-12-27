@@ -36,7 +36,8 @@
     "vue-tables-2": "^1.6.15",
     "vue-tables-3": "^2.0.1-beta05",
     "vuejs-dialog": "^1.4.1",
-    "vuex": "^3.1.2"
+    "vuex": "^3.1.2",
+    "webpack": "^4.41.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",

@@ -37,74 +37,99 @@ export default {
   },
   methods: {
     login() {
-      if (this.input.username != "" && this.input.password != "") {
-        if (
-          this.input.username != this.$parent.mockAccount.username &&
-          this.input.password != this.$parent.mockAccount.password
-        ) {
-          alert("The username and / or password is incorrect");
-          return;
-        }
-      } else {
-        alert("A username and password must be present");
-        return;
-      }
-      this.btnText = "Loading...";
-      axios.get(this.address + "reset")
-        .then(res => {
-          this.$store.commit("mutate_confirmation", res.data);
-          console.log(this.$store.getters.confirmation);
-          axios.get(this.address + "accounts")
-            .then(res => {
-              this.$store.commit("mutate_accounts", res.data);
-              console.log(this.$store.getters.accounts);
-              axios.get(this.address + "computers")
-                .then(res => {
-                  this.$store.commit("mutate_computers", res.data);
-                  console.log(this.$store.getters.computers);
-                  axios.get(this.address + "ac")
-                    .then(res => {
-                      this.$store.commit("mutate_accountcomp", res.data);
-                      console.log(this.$store.getters.accountcomp);
-                  if (this.input.username != "" && this.input.password != "") {
-                    if (
-                      this.input.username ==
-                        this.$parent.mockAccount.username &&
-                      this.input.password == this.$parent.mockAccount.password
-                    ) {
-                      this.$emit("authenticated", true);
-                      this.$router.replace({ name: "secure" });
-                    } else {
-                      alert("The username and / or password is incorrect");
-                    }
-                  } else {
-                    alert("A username and password must be present");
-                  }
+	if (this.input.username != "" && this.input.password != "") {
+		if (
+			this.input.username != this.$parent.mockAccount.username &&
+			this.input.password != this.$parent.mockAccount.password
+		) {
+			alert("The username and / or password is incorrect");
+			return;
+		}
+	} else {
+		alert("A username and password must be present");
+		return;
+	}
+	this.btnText = "Loading...";
+	axios
+		.get(this.address + "reset")
+		.then(res => {
+			this.$store.commit("mutate_confirmation", res.data);
+			console.log(this.$store.getters.confirmation);
+			axios
+				.get(this.address + "accounts")
+				.then(res => {
+					this.$store.commit("mutate_accounts", res.data);
+					console.log(this.$store.getters.accounts);
+					axios
+						.get(this.address + "computers")
+						.then(res => {
+							this.$store.commit("mutate_computers", res.data);
+							console.log(this.$store.getters.computers);
+							axios
+								.get(this.address + "ac")
+								.then(res => {
+									this.$store.commit("mutate_accountcomp", res.data);
+									console.log(this.$store.getters.accountcomp);
 
-                }).catch(err => {
-                  console.log(err);
-                  this.btnText = "Error";
-                  this.nonet = true;
-                });
-                })
-                .catch(err => {
-                  console.log(err);
-                  this.btnText = "Error";
-                  this.nonet = true;
-                });
-            })
-            .catch(err => {
-              console.log(err);
-              this.btnText = "Error";
-              this.nonet = true;
-            });
-        })
-        .catch(err => {
-          console.warn(err);
-          this.btnText = "Error";
-          this.nonet = true;
-        });
-    }
+									axios
+										.get(this.address + "disp")
+										.then(res => {
+											this.$store.commit("mutate_display", res.data);
+											console.log(this.$store.getters.display);
+
+											if (
+												this.input.username != "" &&
+												this.input.password != ""
+											) {
+												if (
+													this.input.username ==
+													this.$parent.mockAccount.username &&
+													this.input.password ==
+													this.$parent.mockAccount.password
+												) {
+													this.$emit("authenticated", true);
+													this.$router.replace({
+														name: "secure"
+													});
+												} else {
+													alert(
+														"The username and / or password is incorrect"
+													);
+												}
+											} else {
+												alert("A username and password must be present");
+											}
+										})
+										.catch(err => {
+											console.log(err);
+											this.btnText = "Error";
+											this.nonet = true;
+										});
+								})
+								.catch(err => {
+									console.log(err);
+									this.btnText = "Error";
+									this.nonet = true;
+								});
+						})
+						.catch(err => {
+							console.log(err);
+							this.btnText = "Error";
+							this.nonet = true;
+						});
+				})
+				.catch(err => {
+					console.log(err);
+					this.btnText = "Error";
+					this.nonet = true;
+				});
+		})
+		.catch(err => {
+			console.warn(err);
+			this.btnText = "Error";
+			this.nonet = true;
+		});
+}
   }
 };
 </script>
