@@ -73,7 +73,7 @@ updateParams(newProps) {
              <span style="font-weight: bold; color: red;">Not in Use</span> 
           </span>
           <span v-if="Number(props.row.timecompare) <= (ts)">
-             <span style="font-weight: bold; color: red;">Not in Use</span> 
+             <span style="font-weight: bold; color: teal;"> >6 months </span> 
           </span>
           <span v-else>{{props.formattedRow[props.column.field]}}</span>
        </span>
@@ -114,7 +114,7 @@ updateParams(newProps) {
 
 <script>
 import { VueGoodTable } from "vue-good-table";
-
+import axios from 'axios';
 export default {
   name: "Secure",
   components: {
@@ -123,9 +123,7 @@ export default {
   mounted(){
     this.rows = this.$store.getters.display
     console.log(this.$store.getters.confirmation)
-    this.ts = Math.round((new Date()).getTime() / 1000) - - 15552000;
-    console.log(this.ts)
-    console.log(1497628682361<this.ts)
+    this.ts = Math.round((new Date()).getTime()) - (1000 * 15552000);
   },
   created(){
     
@@ -133,6 +131,8 @@ export default {
   },
   data() {
     return {
+      errors: [],
+      url:"http://69f20d61.ngrok.io/api/v1/posts/",
       ts:"",
       rows:[],
       newpassword: "",
@@ -160,7 +160,8 @@ export default {
         {
           label: "Change Computer Number",
           field: "compchange",
-          width:"9%"
+          width:"9%",
+          hidden:true
         },
         {
           label: "Reset Password",
@@ -173,50 +174,6 @@ export default {
           width:"10%",
         },
       ],
-/*       rows: [ 
-        {
-          id: 1,
-          name: "John",
-          age: "20",
-          createdAt: "2019-9-2",
-          score: 0.033843
-        },
-        {
-          id: 2,
-          name: "Jane",
-          age: "24",
-          createdAt: "2019-10-31",
-          score: 0.013343
-        },
-        {
-          id: 3,
-          name: "Susan",
-          age: "16",
-          createdAt: "2019-10-30",
-          score: 0.038343
-        },
-        {
-          id: 4,
-          name: "Chris",
-          age: "55",
-          createdAt: "2019-10-11",
-          score: 0.032343
-        },
-        {
-          id: 5,
-          name: "Dan",
-          age: 40,
-          createdAt: "2019-10-21",
-          score: 0.033343
-        },
-        {
-          id: 6,
-          name: "John",
-          age: 20,
-          createdAt: "2019-10-31",
-          score: 0.035343
-        }
-      ] */
     };
   },
   methods: {
@@ -283,7 +240,6 @@ export default {
       })
     },
     changeComp: function(user){
-      console.log(user);
       this.$dialog.prompt({title: "New Computer Number", html: true, body: "What is the computer number of " + user.name +"", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
           .then((dialog)=>{
             this.newpassword = dialog.data;
@@ -291,6 +247,14 @@ export default {
               this.notification('warn', 'Computer Number' , "canceled", 3000,"Your computer number <b>cannot</b> be empty.")
               throw new Error("Cannot have empty password");
             }else{
+              axios.post(this.url+"acupdate", {
+                  body: [{"test":"nope"},{"test2":"yes"}]
+                })
+                .then(response => {console.log(response)})
+                .catch(e => {
+                  console.log(e);
+                  this.errors.push(e)
+                })
               this.notification('success','Computer Number' , "success", 2000,"A command is now being sent to <b>change the computer number</b> ")
             }
           })
