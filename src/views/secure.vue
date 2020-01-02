@@ -170,10 +170,10 @@ export default {
         {
           label: "Terminate",
           field: "terminate",
-          width:"10%"
+          width:"10%",
         },
       ],
-/*       rows: [
+/*       rows: [ 
         {
           id: 1,
           name: "John",
