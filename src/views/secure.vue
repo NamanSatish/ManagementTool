@@ -113,6 +113,7 @@ updateParams(newProps) {
 
 
 <script>
+/* eslint-disable */
 import { VueGoodTable } from "vue-good-table";
 import axios from 'axios';
 export default {
@@ -131,6 +132,9 @@ export default {
   },
   data() {
     return {
+      accountcomp:[],
+      post:[],
+      obj:{},
       errors: [],
       url:"http://69f20d61.ngrok.io/api/v1/posts/",
       ts:"",
@@ -143,7 +147,7 @@ export default {
           width: "30%"
         },
         {
-          label: "Computer Number",
+          label: "Computer Name",
           field: "compnum",
           width:"20%"
         },
@@ -155,13 +159,14 @@ export default {
         {
           label: "Activity",
           field: "timecompare",
-          width:"10%"
+          width:"10%",
+          hidden:true
         },
         {
-          label: "Change Computer Number",
+          label: "Change Computer Name",
           field: "compchange",
           width:"9%",
-          hidden:true
+          
         },
         {
           label: "Reset Password",
@@ -184,7 +189,7 @@ export default {
           .then((dialog)=>{
             this.newpassword = dialog.data;
             if( dialog.data.trim() == "" ){
-              this.notification('warn', 'Password' , "canceled", 3000,"Your password <b>cannot</b> be empty.")
+              this.notification('warn', 'Password' , "canceled", 5000,"Your password <b>cannot</b> be empty.")
               throw new Error("Cannot have empty password");
             }
             this.$dialog.prompt({       
@@ -194,19 +199,19 @@ export default {
               loader: true})
               .then((dialog) => {
                 if(dialog.data != this.newpassword){
-                  this.notification('warn', 'Password', "canceled", 3000,"The passwords did not match, ensure that it is correctly typed. If this was an error, contact Relion.")
+                  this.notification('warn', 'Password', "canceled", 5000,"The passwords did not match, ensure that it is correctly typed. If this was an error, contact Relion.")
                 }else {
                   this.sendPassword(user,this.newpassword);
                   this.notification('success', 'Password' , "success", 2000,"A command is now being sent to <b>change the password</b> ")
                 }
               })
               .catch( e =>{
-                this.notification('warn', 'Password', "canceled", 3000,"There was either an error or you have canceled this process. If this was an error, contact Relion.")
+                this.notification('warn', 'Password', "canceled", 5000,"There was either an error (Do not use enter key) or you have canceled this process. If this was an error, contact Relion.")
               if(e){ console.error(e);}
               });
           })
         .catch( err =>{
-          this.notification('warn', 'Password', "canceled", 3000,"There was either an error or you have canceled this process. If this was an error, contact Relion.")
+          this.notification('warn', 'Password', "canceled", 5000,"There was either an error (Do not use enter key) or you have canceled this process. If this was an error, contact Relion.")
               if(err){ console.error(err);}
         });
 
@@ -221,7 +226,7 @@ export default {
             this.notification('success','Terminate' , "success", 2000,"A command is now being sent to <b>terminate</b> ")
           })
           .catch((e) => {
-            this.notification('warn','Terminate',"canceled",3000,"There was either an error or you have canceled this process. If this was an error, contact Relion.")
+            this.notification('warn','Terminate',"canceled",5000,"There was either an error (Do not use enter key) or you have canceled this process. If this was an error, contact Relion.")
             if(e){ console.error(e);}
           })
       
@@ -240,26 +245,49 @@ export default {
       })
     },
     changeComp: function(user){
-      this.$dialog.prompt({title: "New Computer Number", html: true, body: "What is the computer number of " + user.name +"", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
+      this.$dialog.prompt({title: "New Computer Name", html: true, body: "What is the computer name of " + user.name +"", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
           .then((dialog)=>{
+            this.accountcomp = this.$store.getters.accountcomp
             this.newpassword = dialog.data;
             if( dialog.data.trim() == "" ){
-              this.notification('warn', 'Computer Number' , "canceled", 3000,"Your computer number <b>cannot</b> be empty.")
+              this.notification('warn', 'Computer Name' , "canceled", 5000,"Your computer name <b>cannot</b> be empty.")
               throw new Error("Cannot have empty password");
             }else{
-              axios.post(this.url+"acupdate", {
-                  body: [{"test":"nope"},{"test2":"yes"}]
+              for(var i =0 ; i<this.accountcomp.length;i++){
+                if(this.accountcomp[i].SAMAccountName == user.SAMAccountName){
+                  this.accountcomp[i].compnum = dialog.data;
+                  console.log(user.name)
+                }
+              }
+              this.$store.commit("mutate_accountcomp", this.accountcomp);
+
+
+               axios.post(this.url+"acupdate", {
+                  body: this.$store.getters.accountcomp
                 })
-                .then(response => {console.log(response)})
+                .then(response => {
+                  console.warn(response)
+                  
+                  if(response.status ==201){
+                    for(var i =0; i<this.rows.length;i++){
+                      if(this.rows[i].id == user.id){
+                        this.rows[i].compnum = dialog.data
+                        
+                      }
+                    }
+                  }
+                  })
                 .catch(e => {
-                  console.log(e);
+                  console.error(e);
                   this.errors.push(e)
+                  
                 })
-              this.notification('success','Computer Number' , "success", 2000,"A command is now being sent to <b>change the computer number</b> ")
+            
+              this.notification('success','Computer Name' , "success", 2000,"A command is now being sent to <b>change the computer name</b> of " + user.name + " to " + dialog.data)
             }
           })
         .catch( err =>{
-          this.notification('warn', 'Computer Number', "canceled", 3000,"There was either an error or you have canceled this process. If this was an error, contact Relion.")
+          this.notification('warn', 'Computer Name', "canceled", 5000,"There was either an error (Do not use enter key) or you have canceled this process. If this was an error, contact Relion.")
               if(err){ console.error(err);}
         });
 
