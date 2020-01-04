@@ -6,6 +6,7 @@ import VuejsDialog from 'vuejs-dialog';
 import BootstrapVue from 'bootstrap-vue';
 import Notifications from 'vue-notification';
 import Vuex from 'vuex';
+import VueCrypt from 'vue-crypt'
 
 
 import 'vue-good-table/dist/vue-good-table.css'
@@ -20,6 +21,7 @@ import VueAxios from 'vue-axios';
 Vue.use(VueAxios, axios);
 Vue.use(VueGoodTablePlugin);
 Vue.use(VuejsDialog);
+Vue.use(VueCrypt)
 Vue.use(BootstrapVue);
 Vue.use(Notifications);
 Vue.use(Vuex);

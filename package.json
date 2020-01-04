@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start":"vue-cli-service serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
@@ -27,6 +28,7 @@
     "v-form-builder": "^1.4.1-rc2",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
+    "vue-crypt": "^1.0.0",
     "vue-form-generator": "^2.3.4",
     "vue-good-table": "^2.18.1",
     "vue-gridmultiselect": "^1.1.0-beta-2",

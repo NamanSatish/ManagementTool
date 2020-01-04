@@ -233,7 +233,25 @@ export default {
     },
     sendPassword: function(user,newpassword){
       //someapi stuff
-     console.warn("should have done some api stuff :)" + user + newpassword);
+      this.newpassword = newpassword
+      axios.post(this.url+"reset", {
+                  text: this.newpassword,
+                  user: user.SAMAccountName
+                })
+                .then(response => {
+                  console.warn(response)
+                  if(response.status ==201){
+                  this.notification('success','Computer Name' , "success", 2000,user.name + "'s password has been changed to " + this.newpassword)
+                  }else{
+                    this.notification('warn', 'Error' , "canceled", 5000,"There has been an error, contact Relion")
+                  }
+                })
+                .catch(e => {
+                  console.error(e);
+                  this.errors.push(e)
+                  this.notification('warn', 'Error' , "canceled", 5000,"There has been an error, contact Relion")
+                })
+    
     },
     notification: function(type1,title1,group1,time,text1){
       this.$notify({
