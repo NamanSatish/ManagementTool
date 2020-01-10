@@ -185,11 +185,11 @@ export default {
     /*eslint no-console: ["error", { allow: ["warn", "error","log"] }] */
     resetPassword: function(user) {
       console.log(user);
-      this.$dialog.prompt({title: "Reset Password", html: true, body: "What is the new password for " + user.name +". Requirements : 10 characters.", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
+      this.$dialog.prompt({title: "Reset Password", html: true, body: "What is the new password for " + user.name +". Requirements : 10 characters minimum, cannot contain any part of the user's name,One uppercase and lowercase character, one number, and one special character !@#$%^&*()", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
           .then((dialog)=>{
             this.newpassword = dialog.data;
-            if( dialog.data.trim() == "" && dialog.data.length < 10 ){
-              this.notification('warn', 'Password' , "canceled", 5000,"Your password <b>cannot</b> be that weak. Security Protocols require 10 characters minimum")
+            if( dialog.data.trim() == "" && dialog.data.match(/^(?=.\d)(?=.[a-z])(?=.[A-Z])(?=.[^a-zA-Z0-9])(?!.*\s).{10,50}$/) ){
+              this.notification('warn', 'Password' , "canceled", 10000,"Your password <b>cannot</b> be that weak. Security Protocols are:  10 characters minimum, cannot contain any part of the user's name,One uppercase and lowercase character, one number, and one special character !@#$%^&*() ")
               throw new Error("Cannot have empty password");
             }
             this.$dialog.prompt({       
