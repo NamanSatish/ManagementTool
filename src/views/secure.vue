@@ -185,11 +185,11 @@ export default {
     /*eslint no-console: ["error", { allow: ["warn", "error","log"] }] */
     resetPassword: function(user) {
       console.log(user);
-      this.$dialog.prompt({title: "Reset Password", html: true, body: "What is the new password for " + user.name +". Suggestions : 7 characters, 1 capital letter, contain 1 number.", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
+      this.$dialog.prompt({title: "Reset Password", html: true, body: "What is the new password for " + user.name +". Requirements : 10 characters.", loader: true,promptHelp: 'Type in the box below and click "[+:okText]"' })
           .then((dialog)=>{
             this.newpassword = dialog.data;
-            if( dialog.data.trim() == "" ){
-              this.notification('warn', 'Password' , "canceled", 5000,"Your password <b>cannot</b> be empty.")
+            if( dialog.data.trim() == "" && dialog.data.length < 10 ){
+              this.notification('warn', 'Password' , "canceled", 5000,"Your password <b>cannot</b> be that weak. Security Protocols require 10 characters minimum")
               throw new Error("Cannot have empty password");
             }
             this.$dialog.prompt({       
