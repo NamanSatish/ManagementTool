@@ -224,12 +224,32 @@ export default {
         this.$dialog.confirm("You are about to <b>terminate " + user.name + "</b>. This is <b>irreversible</b>.", {type: 'hard', html: true, verification: 'Terminate'})
           .then(() => {
             this.notification('success','Terminate' , "success", 2000,"A command is now being sent to <b>terminate</b> ")
+            this.sendTerminate(user)
           })
           .catch((e) => {
             this.notification('warn','Terminate',"canceled",5000,"There was either an error (Do not use enter key) or you have canceled this process. If this was an error, contact Relion.")
             if(e){ console.error(e);}
           })
       
+    },
+    sendTerminate: function(user){
+      axios.post(this.url+"terminate", {
+                  user: user.SAMAccountName
+                })
+                .then(response => {
+                  console.warn(response)
+                  if(response.status ==201){
+                  this.notification('success','Termination' , "success", 2000,user.name + "'s password has been terminated")
+                  }else{
+                    this.notification('warn', 'Error' , "canceled", 5000,"There has been an error, contact Relion")
+                  }
+                })
+                .catch(e => {
+                  console.error(e);
+                  this.errors.push(e)
+                  this.notification('warn', 'Error' , "canceled", 5000,"There has been an error, contact Relion")
+                })
+
     },
     sendPassword: function(user,newpassword){
       //someapi stuff
