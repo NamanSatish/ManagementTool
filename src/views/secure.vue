@@ -136,7 +136,7 @@ export default {
       post:[],
       obj:{},
       errors: [],
-      url:"http://69f20d61.ngrok.io/api/v1/posts/",
+      url:"http://6622ec7c.ngrok.io/api/v1/posts/",
       ts:"",
       rows:[],
       newpassword: "",
@@ -239,7 +239,7 @@ export default {
                 .then(response => {
                   console.warn(response)
                   if(response.status ==201){
-                  this.notification('success','Termination' , "success", 2000,user.name + "'s password has been terminated")
+                  this.notification('success','Termination' , "success", 2000,user.name + "'s account has been terminated")
                   }else{
                     this.notification('warn', 'Error' , "canceled", 5000,"There has been an error, contact Relion")
                   }
@@ -259,8 +259,8 @@ export default {
                   user: user.SAMAccountName
                 })
                 .then(response => {
-                  console.warn(response)
-                  if(response.status ==201){
+                  console.warn(response.status)
+                  if(response.status == 201){
                   this.notification('success','Computer Name' , "success", 2000,user.name + "'s password has been changed to " + this.newpassword)
                   }else{
                     this.notification('warn', 'Error' , "canceled", 5000,"There has been an error, contact Relion")
