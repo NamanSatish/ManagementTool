@@ -136,7 +136,7 @@ export default {
       post:[],
       obj:{},
       errors: [],
-      url:"http://192.168.1.11:22659/api/v1/posts",
+      url:"http://192.168.1.11:22659/api/v1/posts/",
       ts:"",
       rows:[],
       newpassword: "",
