@@ -28,7 +28,7 @@ export default {
     return {
       btnText: "Login",
       nonet: false,
-      address: "http://6622ec7c.ngrok.io/api/v1/posts/",
+      address: "http://192.168.1.11:22659/api/v1/posts",
       input: {
         username: "",
         password: ""
